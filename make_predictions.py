@@ -15,10 +15,12 @@ r"""Run massspec model on data and write out predictions.
 
 Example usage:
 blaze-bin/third_party/py/deep_molecular_massspec/make_predictions \
---alsologtostderr --input_file=testdata/test_14_record.gz \
+python make_predictions.py \
+--input_file=testdata/test_14_record.gz \
 --output_file=/tmp/models/output_predictions \
 --model_checkpoint_path=/tmp/models/output/ \
---hparams=eval_batch_size=16
+--hparams=eval_batch_size=16 \
+--alsologtostderr
 
 This saves a numpy archive to FLAGS.output_file that contains a dictionary
 where the keys are inchikeys and values are 1D np arrays for spectra.

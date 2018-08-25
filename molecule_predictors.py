@@ -123,8 +123,8 @@ class MassSpectraPrediction(object):
         max_atom_type=ms_constants.MAX_ATOM_ID,
         include_atom_mass=True,
         normalize_predictions=False,
-        make_spectra_plots=False,
-        save_spectra_plots_to_file=False,
+        make_spectra_plots=True,  # default :Flase
+        save_spectra_plots_to_file=True, # default :Flase
         do_library_matching=True,
         loss='generalized_mse',
         # When computing cosine similarity and generalized_mse, scale the
@@ -410,7 +410,7 @@ class MLPSpectraPrediction(MassSpectraPrediction):
 
     activation_fn = getattr(tf.nn, hparams.hidden_layer_activation)
 
-    feature_to_use = self._fingerprints_to_use(hparams)
+    feature_to_use = self._fingerprints_to_use(hparams) # take fingerprints as input of MLP.
     layer_output = feature_dict[feature_to_use]
 
     if hparams.num_hidden_layers > 0:

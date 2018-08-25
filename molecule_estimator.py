@@ -11,11 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-r"""Train and evaluate massspec model.
+"""Train and evaluate massspec model.
 
 Example usage:
-molecule_estimator.py --train_steps=1000 --model_dir='/tmp/models/output' \
---dataset_config_file=testdata/test_dataset_config_file.json --alsologtostderr
+python molecule_estimator.py \
+--train_steps=1000 \
+--model_dir=/tmp/models/output \
+--dataset_config_file=testdata/test_dataset_config_file.json \
+--alsologtostderr
 """
 
 from __future__ import print_function
@@ -47,7 +50,7 @@ tf.flags.DEFINE_integer(
     'how frequently to evaluate (only used when schedule =='
     ' continuous_train_and_eval')
 
-tf.flags.DEFINE_string('model_dir', '',
+tf.flags.DEFINE_string('model_dir', None,
                        'output directory for checkpoints and events files')
 tf.flags.DEFINE_string('warm_start_dir', None,
                        'directory to warm start model from')

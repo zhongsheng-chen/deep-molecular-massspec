@@ -58,12 +58,12 @@ def get_similarities(raw_spectra_array):
 
 
 def main():
-    mol_list = parse_sdf_utils.get_sdf_to_mol('/mnt/storage/NIST_zipped/NIST17/replib_mend.sdf')
+    mol_list = parse_sdf_utils.get_sdf_to_mol('testdata/test_14_mend.sdf')
     inchikey_dict = train_test_split_utils.make_inchikey_dict(mol_list)
 
-    spectra_for_one_mol = make_spectra_array(inchikey_dict['PDACHFOTOFNHBT-UHFFFAOYSA-N'])
+    spectra_for_one_mol = make_spectra_array(inchikey_dict['UFHFLCQGNIYNRP-UHFFFAOYSA-N'])
     distance_matrix = get_similarities(spectra_for_one_mol)
-    print('distance for spectra in PDACHFOTOFNHBT-UHFFFAOYSA-N', distance_matrix)
+    print('distance for spectra in UFHFLCQGNIYNRP-UHFFFAOYSA-N', distance_matrix)
     
 if __name__ == '__main__':
     main()

@@ -121,7 +121,7 @@ def plot_true_and_predicted_spectra(
   ax_main.set_xlabel(SPECTRA_PLOT_X_AXIS_LABEL)
   ax_main.set_ylabel(SPECTRA_PLOT_Y_AXIS_LABEL)
 
-  ax_top = figure.add_subplot(211, axisbg=SPECTRA_PLOT_BACKGROUND_COLOR)
+  ax_top = figure.add_subplot(211, facecolor=SPECTRA_PLOT_BACKGROUND_COLOR)
 
   bar_top = ax_top.bar(
       x_array,
@@ -136,7 +136,7 @@ def plot_true_and_predicted_spectra(
   ax_top.grid(
       color=SPECTRA_PLOT_GRID_COLOR, linewidth=SPECTRA_PLOT_BAR_GRID_LINE_WIDTH)
 
-  ax_bottom = figure.add_subplot(212, axisbg=SPECTRA_PLOT_BACKGROUND_COLOR)
+  ax_bottom = figure.add_subplot(212, facecolor=SPECTRA_PLOT_BACKGROUND_COLOR)
   figure.subplots_adjust(hspace=0.0)
 
   bar_bottom = ax_bottom.bar(
