@@ -42,6 +42,12 @@ make_train_test_split.py \
 --replicates_sdf_name=testdata/test_2_mend.sdf \
 --output_master_dir=/tmp/output_dataset_dir \
 --alsologtostderr
+
+python make_train_test_split.py \
+--main_sdf_name=testdata/test_14_mend.sdf \
+--replicates_sdf_name=testdata/test_2_mend.sdf \
+--output_master_dir=/tmp/massspec_predictions/ \
+--alsologtostderr
 """
 
 from __future__ import absolute_import
