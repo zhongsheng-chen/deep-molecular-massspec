@@ -494,7 +494,8 @@ def _parse_example(example_protos, hparams, features_to_load):
         parsed_features[fmap_constants.DENSE_MASS_SPEC] = preprocess_spectrum(
             parsed_features[fmap_constants.DENSE_MASS_SPEC], hparams)
 
-    if (features_to_load is None or fmap_constants.SMILES in features_to_load):
+    if (features_to_load is None or
+            fmap_constants.SMILES in features_to_load):
         smiles_string = parsed_features[fmap_constants.SMILES]
         index_array = tf.py_func(feature_utils.tokenize_smiles,
                                  [smiles_string], [tf.int64])
