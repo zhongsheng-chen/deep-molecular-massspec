@@ -138,7 +138,7 @@ def _save_plot_figure(key, prediction, true_spectrum, results_dir):
     plot_spectra_utils.plot_true_and_predicted_spectra(
         true_spectrum, prediction,
         output_filename=os.path.join(results_dir, spectra_plot_file_name),
-        rescale_mz_axis=True
+        rescale_mz_axis=False
     )
 
 
