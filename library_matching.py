@@ -55,7 +55,7 @@ class LibraryMatchingData(
 
     All input data dictionaries must have the following keys:
     fmap_constants.INCHIKEY, fmap_constants.DENSE_MASS_SPEC,
-    and all keys in fmap_constants.FINGERPRINT_LIST
+    and all keys in fmap_constants.FP_TYPE_LIST
 
     Args:
       observed: data put into the library using true observed spectra.
