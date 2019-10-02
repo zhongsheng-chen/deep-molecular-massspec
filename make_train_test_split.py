@@ -37,17 +37,12 @@ library matching, spectra prediction.
 Note: Reading sdf files from cns currently not supported.
 
 Example usage:
-make_train_test_split.py \
+python make_train_test_split.py \
 --main_sdf_name=testdata/test_14_mend.sdf \
 --replicates_sdf_name=testdata/test_2_mend.sdf \
 --output_master_dir=/tmp/output_dataset_dir \
 --alsologtostderr
 
-python make_train_test_split.py \
---main_sdf_name=testdata/test_14_mend.sdf \
---replicates_sdf_name=testdata/test_2_mend.sdf \
---output_master_dir=/tmp/massspec_predictions/ \
---alsologtostderr
 """
 
 from __future__ import absolute_import
@@ -251,7 +246,7 @@ def write_all_dataset_files(inchikey_dict,
        basename.tfrecord.info: a text file with one line describing
            the length of the TFRecord file.
       Also saves if make_library_array is set:
-       basename.npz : see parse_sdf_utils.write_dicts_to_example
+       basename.npy : see parse_sdf_utils.write_dicts_to_example
     """
     record_name = base_name + TFRECORD_FILENAME_END
 

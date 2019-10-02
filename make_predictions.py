@@ -14,7 +14,6 @@
 r"""Run massspec model on data and write out predictions.
 
 Example usage:
-blaze-bin/third_party/py/deep_molecular_massspec/make_predictions \
 python make_predictions.py \
 --input_file=testdata/test_14_record.gz \
 --output_file=/tmp/models/output_predictions \

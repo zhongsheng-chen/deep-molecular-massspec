@@ -20,11 +20,6 @@ python molecule_estimator.py \
 --dataset_config_file=testdata/test_dataset_config_file.json \
 --alsologtostderr
 
-python molecule_estimator.py \
---dataset_config_file=/tmp/massspec_predictions/query_replicates_val_predicted_replicates_val.json \
---train_steps=1000 \
---model_dir=/tmp/massspec_predictions/models/output --hparams=make_spectra_plots=True \
---alsologtostderr
 """
 
 from __future__ import print_function
@@ -47,17 +42,17 @@ tf.flags.DEFINE_string(
     'hparams', '', 'Hyperparameter values to override the defaults.'
                    'Format: params1=value1,params2=value2, ...'
                    'Possible parameters: max_atoms, max_mass_spec_peak_loc,'
-                   'batch_size, epochs, do_linear_regression,'
+                   'batch_size, epochs, do_library_matching,'
                    'get_mass_spec_features, init_weights, init_bias')
 tf.flags.DEFINE_integer('train_steps', None,
                         'The number of steps to run training for.')
 tf.flags.DEFINE_integer(
     'train_steps_per_iteration', 1000,
-    'how frequently to evaluate (only used when schedule =='
-    ' continuous_train_and_eval')
+    'how frequently to evaluate (only used when schedule == '
+    'continuous_train_and_eval.')
 
 tf.flags.DEFINE_string('model_dir', None,
-                       'output directory for checkpoints and events files')
+                       'output directory for checkpoints and events files.')
 tf.flags.DEFINE_string('warm_start_dir', None,
                        'directory to warm start model from')
 
@@ -104,7 +99,7 @@ def make_input_fn(dataset_config_file,
       features_to_load: list of keys to load from the input data
       load_library_matching_data: whether to load library matching data.
       data_dir: The directory containing the file names referred to in
-        dataset_config_file. If None (the default) then this is assumed to be the
+        dataset_config_file. If None (default) then this is assumed to be the
         directory containing dataset_config_file.
     Returns:
       A function for creating features and labels from a dataset.
@@ -118,7 +113,9 @@ def make_input_fn(dataset_config_file,
     def _input_fn(record_fnames,
                   all_data_in_one_batch,
                   load_training_spectrum_library=False):
-        """Reads TFRecord from a list of record file names."""
+        """Reads TFRecord from a list of record file names. Modified by Zhongsheng Chen (zhongsheng.chen@outlook.com)
+        on Sept. 30, 2019. A set function was used to remove repeated keys of fields in features.
+        """
         if not record_fnames:
             return None
 
@@ -127,7 +124,7 @@ def make_input_fn(dataset_config_file,
             record_fnames,
             hparams,
             mode=mode,
-            features_to_load=(features_to_load + hparams.label_names),
+            features_to_load=set(features_to_load + hparams.label_names),
             all_data_in_one_batch=all_data_in_one_batch)
         dict_to_return = parse_sdf_utils.make_features_and_labels(
             dataset, features_to_load, hparams.label_names, mode=mode)[0]

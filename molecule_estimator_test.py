@@ -178,24 +178,23 @@ class MoleculeEstimatorTest(tf.test.TestCase, parameterized.TestCase):
                             prediction_helper.get_default_hparams,
                             self.all_predicted_dataset_config_file)
 
+    def test_plot_true_and_predicted_spectra(self):
+        """Test if plot is successfully generated given two spectra."""
+        max_mass_spec_peak_loc = ms_constants.MAX_PEAK_LOC
+        true_spectra = np.zeros(max_mass_spec_peak_loc)
+        predicted_spectra = np.zeros(max_mass_spec_peak_loc)
+        true_spectra[3:6] = 60
+        predicted_spectra[300] = 999
+        true_spectra[200] = 780
 
-def test_plot_true_and_predicted_spectra(self):
-    """Test if plot is successfully generated given two spectra."""
-    max_mass_spec_peak_loc = ms_constants.MAX_PEAK_LOC
-    true_spectra = np.zeros(max_mass_spec_peak_loc)
-    predicted_spectra = np.zeros(max_mass_spec_peak_loc)
-    true_spectra[3:6] = 60
-    predicted_spectra[300] = 999
-    true_spectra[200] = 780
+        test_figure_path_name = os.path.join(self.temp_dir, 'test.png')
+        generated_plot = plot_spectra_utils.plot_true_and_predicted_spectra(
+            true_spectra, predicted_spectra, output_filename=test_figure_path_name)
 
-    test_figure_path_name = os.path.join(self.temp_dir, 'test.png')
-    generated_plot = plot_spectra_utils.plot_true_and_predicted_spectra(
-        true_spectra, predicted_spectra, output_filename=test_figure_path_name)
-
-    self.assertEqual(
-        np.shape(generated_plot),
-        plot_spectra_utils.SPECTRA_PLOT_DIMENSIONS_RGB)
-    self.assertTrue(os.path.exists(test_figure_path_name))
+        self.assertEqual(
+            np.shape(generated_plot),
+            plot_spectra_utils.SPECTRA_PLOT_DIMENSIONS_RGB)
+        self.assertTrue(os.path.exists(test_figure_path_name))
 
 
 if __name__ == '__main__':

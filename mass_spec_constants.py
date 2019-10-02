@@ -19,10 +19,10 @@ from collections import namedtuple
 
 class CircularFingerprintKey(
     namedtuple('CircularFingerprintKey', ['fp_type', 'fp_len', 'radius'])):
-  """Helper function for labeling fingerprint keys."""
+    """Helper function for labeling fingerprint keys."""
 
-  def __str__(self):
-    return self.fp_type + '_' + str(self.fp_len) + '_' + str(self.radius)
+    def __str__(self):
+        return self.fp_type + '_' + str(self.fp_len) + '_' + str(self.radius)
 
 
 # Constants for SDF tags found in NIST sdf files:
