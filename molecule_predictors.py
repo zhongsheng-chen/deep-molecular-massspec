@@ -43,7 +43,7 @@ def register_model(model_type):
         if model_type in MODEL_REGISTRY:
             raise ValueError('model type %s already registered' % model_type)
         MODEL_REGISTRY[model_type] = model_cls
-        model_cls.model_type = type
+        model_cls.model_type = model_type
         return model_cls
 
     return _decorator
@@ -147,7 +147,7 @@ class MassSpectraPrediction(object):
             reverse_prediction=True,
             max_prediction_above_molecule_mass=5,
             bidirectional_prediction=True,
-            gate_bidirectional_predictions=False,
+            gate_bidirectional_predictions=True,
             filter_library_matches_by_mass=False,
             library_matching_mass_tolerance=5,
         )

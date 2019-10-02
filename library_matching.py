@@ -387,7 +387,7 @@ def library_matching(combined_data,
 
     We first construct a library of spectra by merging a set of observed spectra
     with a set of spectra that are generated synthetically using a predictive
-    model. Each spectrum in the library is associated with a id of the true
+    model. Each spectrum in the library is associated with a id (inchkey) of the true
     molecule that it is associated with.
 
     Next, we stream over a set of query spectra and compute the cosine similarity
