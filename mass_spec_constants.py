@@ -19,10 +19,10 @@ from collections import namedtuple
 
 class CircularFingerprintKey(
     namedtuple('CircularFingerprintKey', ['fp_type', 'fp_len', 'radius'])):
-  """Helper function for labeling fingerprint keys."""
+    """Helper function for labeling fingerprint keys."""
 
-  def __str__(self):
-    return self.fp_type + '_' + str(self.fp_len) + '_' + str(self.radius)
+    def __str__(self):
+        return self.fp_type + '_' + str(self.fp_len) + '_' + str(self.radius)
 
 
 # Constants for SDF tags found in NIST sdf files:
@@ -30,7 +30,7 @@ SDF_TAG_MASS_SPEC_PEAKS = 'MASS SPECTRAL PEAKS'
 SDF_TAG_INCHIKEY = 'INCHIKEY'
 SDF_TAG_NAME = 'NAME'
 SDF_TAG_MOLECULE_MASS = 'EXACT MASS'
-SDF_TAG_MASS_SPEC_PEAKS = 'MASS SPECTRAL PEAKS'
+# SDF_TAG_MASS_SPEC_PEAKS = 'MASS SPECTRAL PEAKS' # removed by zhongsheng chen, Sep. 03, 2019
 
 # Constants for fields in TFRecords
 MAX_MZ_WEIGHT_RATIO = 3.0

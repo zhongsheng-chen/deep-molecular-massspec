@@ -41,31 +41,31 @@ class ExperimentSetup(
                [('json_name', str), ('data_to_get_from_mainlib', list),
                 ('data_to_get_from_replicates', list),
                 ('experiment_setup_dataset_dict', dict)])):
-  """Stores information related to the various experiment setups.
+    """Stores information related to the various experiment setups.
 
-  Attributes:
-    json_nane : name of the json file to store locations of the datasets
-    data_to_get_from_mainlib: List of dataset keys to grab from the mainlib
-        library.
-    data_to_get_from_replicates: List of dataset keys to grab from the
-        replicates library.
-    experiment_setup_dataset_dict: Dict which matches the experiment keys to
-        lists of the component datasets, matching the basename keys above.
-  """
+    Attributes:
+      json_nane : name of the json file to store locations of the datasets
+      data_to_get_from_mainlib: List of dataset keys to grab from the mainlib
+          library.
+      data_to_get_from_replicates: List of dataset keys to grab from the
+          replicates library.
+      experiment_setup_dataset_dict: Dict which matches the experiment keys to
+          lists of the component datasets, matching the basename keys above.
+    """
 
-  def __new__(cls, json_name, data_to_get_from_mainlib,
-              data_to_get_from_replicates, experiment_setup_dataset_dict):
-    assert (experiment_setup_dataset_dict[LIBRARY_MATCHING_QUERY_KEY] ==
-            experiment_setup_dataset_dict[SPECTRUM_PREDICTION_TEST_KEY]), (
-                'In json {}, library query list did not match'
-                ' spectrum prediction list.'.format(json_name))
-    assert (experiment_setup_dataset_dict[SPECTRUM_PREDICTION_TRAIN_KEY] ==
-            [MAINLIB_TRAIN_BASENAME]), (
-                'In json {}, spectra prediction dataset is not mainlib_train,'
-                ' which is currently not supported.'.format(json_name))
-    return super(ExperimentSetup, cls).__new__(
-        cls, json_name, data_to_get_from_mainlib, data_to_get_from_replicates,
-        experiment_setup_dataset_dict)
+    def __new__(cls, json_name, data_to_get_from_mainlib,
+                data_to_get_from_replicates, experiment_setup_dataset_dict):
+        assert (experiment_setup_dataset_dict[LIBRARY_MATCHING_QUERY_KEY] ==
+                experiment_setup_dataset_dict[SPECTRUM_PREDICTION_TEST_KEY]), (
+            'In json {}, library query list did not match'
+            ' spectrum prediction list.'.format(json_name))
+        assert (experiment_setup_dataset_dict[SPECTRUM_PREDICTION_TRAIN_KEY] ==
+                [MAINLIB_TRAIN_BASENAME]), (
+            'In json {}, spectra prediction dataset is not mainlib_train,'
+            ' which is currently not supported.'.format(json_name))
+        return super(ExperimentSetup, cls).__new__(
+            cls, json_name, data_to_get_from_mainlib, data_to_get_from_replicates,
+            experiment_setup_dataset_dict)
 
 
 # Experiment setups:
