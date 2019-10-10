@@ -1,0 +1,209 @@
+
+  CDK     06261917192D
+
+ 17 18  0  0  0  0  0  0  0  0999 V2000
+   -7.1453    3.6965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -7.1458    2.1957    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -5.8458    4.4473    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.2489    2.1961    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.2491    3.6961    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -5.8468    1.4457    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -4.5468    3.6973    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.9488    1.4463    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.9492    4.4463    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.6502    1.4465    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.9492    2.1965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -4.5473    2.1965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.6489    2.1965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.6491    3.6965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.2482    1.4465    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.6497    4.4469    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.2482   -0.0535    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+  2  1  2  0  0  0  0 
+  3  1  1  0  0  0  0 
+  5  4  2  0  0  0  0 
+  6  2  1  0  0  0  0 
+  7  3  2  0  0  0  0 
+  8  4  1  0  0  0  0 
+  9  5  1  0  0  0  0 
+ 10 11  2  0  0  0  0 
+ 12  6  2  0  0  0  0 
+ 12  7  1  0  0  0  0 
+ 13  8  2  0  0  0  0 
+ 13 10  1  0  0  0  0 
+ 14  9  2  0  0  0  0 
+ 14 13  1  0  0  0  0 
+ 15 11  1  0  0  0  0 
+ 15 12  1  0  0  0  0 
+ 16 14  1  0  0  0  0 
+ 17 15  2  0  0  0  0
+>  <NAME>
+2-Hydroxychalcone
+
+>  <SYNONYMS>
+
+
+>  <PRECURSOR TYPE>
+M-H
+
+>  <SPECTRUM TYPE>
+MS2
+
+>  <PRECURSOR M/Z>
+223.12845079826587
+
+>  <INSTRUMENT TYPE>
+Linear Ion Trap
+
+>  <INSTRUMENT>
+Thermo Finnigan LTQ
+
+>  <COLLISION ENERGY>
+35
+
+>  <ION MODE>
+N
+
+>  <FORMULA>
+C15H12O2
+
+>  <EXACT MASS>
+224.083729624
+
+>  <MW>
+224
+
+>  <ID>
+VF-NPL-LTQ000001
+
+>  <CONTRIBUTOR>
+Arpana Vaniya, {University of California, Davis
+
+>  <COMMENT>
+InChI=InChI=1S/C15H12O2/c16-14-9-5-4-8-13(14)10-11-15(17)12-6-2-1-3-7-12/h1-11,16H/b11-10+
+computed SMILES=O=C(C=CC=1C=CC=CC1O)C=2C=CC=CC2
+raw filename=120_100_iTree_NEG_08042014_10.raw
+author=Arpana Vaniya
+source introduction=direct infusion
+soure voltage=3.50 kV
+capillary temperature=275 C
+ion source=ESI Ion Max
+computed mass accuracy=233.03695283966962
+computed mass error=0.05199717426586403
+SPLASH=splash10-0002-0900000000-6fd327c02607c02c0e42
+submitter=Arpana Vaniya (University of California, Davis)
+MoNA Rating=3.846153846153846
+
+>  <NUM PEAKS>
+2
+
+>  <MASS SPECTRAL PEAKS>
+177.06 1.763028
+195.05 100.000000
+
+$$$$
+
+
+  CDK     06261917192D
+
+ 17 18  0  0  0  0  0  0  0  0999 V2000
+   -7.1453    3.6965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -7.1458    2.1957    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -5.8458    4.4473    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.2489    2.1961    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.2491    3.6961    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -5.8468    1.4457    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -4.5468    3.6973    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.9488    1.4463    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.9492    4.4463    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.6502    1.4465    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.9492    2.1965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -4.5473    2.1965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.6489    2.1965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.6491    3.6965    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.2482    1.4465    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.6497    4.4469    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.2482   -0.0535    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+  2  1  2  0  0  0  0 
+  3  1  1  0  0  0  0 
+  5  4  2  0  0  0  0 
+  6  2  1  0  0  0  0 
+  7  3  2  0  0  0  0 
+  8  4  1  0  0  0  0 
+  9  5  1  0  0  0  0 
+ 10 11  2  0  0  0  0 
+ 12  6  2  0  0  0  0 
+ 12  7  1  0  0  0  0 
+ 13  8  2  0  0  0  0 
+ 13 10  1  0  0  0  0 
+ 14  9  2  0  0  0  0 
+ 14 13  1  0  0  0  0 
+ 15 11  1  0  0  0  0 
+ 15 12  1  0  0  0  0 
+ 16 14  1  0  0  0  0 
+ 17 15  2  0  0  0  0
+>  <NAME>
+2-Hydroxychalcone
+
+>  <SYNONYMS>
+
+
+>  <PRECURSOR TYPE>
+M-H
+
+>  <SPECTRUM TYPE>
+MS2-MS4 Composite
+
+>  <PRECURSOR M/Z>
+223.12845079826587
+
+>  <INSTRUMENT TYPE>
+Linear Ion Trap
+
+>  <INSTRUMENT>
+Thermo Finnigan LTQ
+
+>  <COLLISION ENERGY>
+35
+
+>  <ION MODE>
+N
+
+>  <FORMULA>
+C15H12O2
+
+>  <EXACT MASS>
+224.083729624
+
+>  <MW>
+224
+
+>  <ID>
+VF-NPL-LTQ000002
+
+>  <CONTRIBUTOR>
+Arpana Vaniya, {University of California, Davis
+
+>  <COMMENT>
+InChI=InChI=1S/C15H12O2/c16-14-9-5-4-8-13(14)10-11-15(17)12-6-2-1-3-7-12/h1-11,16H/b11-10+
+computed SMILES=O=C(C=CC=1C=CC=CC1O)C=2C=CC=CC2
+raw filename=120_100_iTree_NEG_08042014_10.raw
+author=Arpana Vaniya
+source introduction=direct infusion
+soure voltage=3.50 kV
+capillary temperature=275 C
+ion source=ESI Ion Max
+computed mass accuracy=233.03695283966962
+computed mass error=0.05199717426586403
+SPLASH=splash10-0006-0900000000-4454873156b3f9385219
+submitter=Arpana Vaniya (University of California, Davis)
+MoNA Rating=3.846153846153846
+
+>  <NUM PEAKS>
+2
+
+>  <MASS SPECTRAL PEAKS>
+177.06 48.684798
+193.05 100.000000
+
+$$$$
