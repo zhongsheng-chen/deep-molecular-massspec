@@ -74,7 +74,7 @@ def parse_peaks(pk_str):
 
     for peak in all_peaks:
         loc, intensity = peak.split()
-        peak_locs.append(int(loc))
+        peak_locs.append(float(loc))
         peak_intensities.append(float(intensity))
 
     return peak_locs, peak_intensities
