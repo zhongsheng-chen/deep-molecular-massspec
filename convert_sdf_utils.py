@@ -5,7 +5,7 @@
 # Date: 10/10/2019
 # Copyright: Copyright 2019, Beijing University of Chemical Technology
 # License: The MIT License (MIT)
-# Email: zhongsheng.chen@outlook.com
+# Email: zschen@mail.buct.edu.cn
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 r"""A helper function for processing SDF-like dataset files from MoNA.
@@ -211,6 +211,16 @@ def _check_mol_block_has_all_prop(mol_block):
     return np.all(prop_check_status)
 
 
+def _max_atoms_in_mol_block(mol_block_list):
+    max_num_atoms = -1024
+    for mol_block in mol_block_list:
+        mol_str = '\n'.join(mol_block)
+        mol = pybel.readstring('sdf', mol_str)
+        if len(mol.atoms) > max_num_atoms:
+            max_num_atoms = len(mol.atoms)
+    return max(max_num_atoms, 0)
+
+
 def convert_to_sdf(path_to_bad_sdf, failed_block_file_name=None, output_dir=None):
     """ Make a sdf-like data file converted to sdf.
 
@@ -225,6 +235,12 @@ def convert_to_sdf(path_to_bad_sdf, failed_block_file_name=None, output_dir=None
             blocks are skipped, no failed molecule block written to file.
         output_dir: Directory to the converted sdf file if set.  By default (None), the directory of the sdf-like data
             file will be set as output directory.
+    Returns:
+        valid_mol_block_list: A list of molecular blocks converted successfully
+        failed_mol_block_list: A list of molecular blocks corrupted.
+        num_valid_mol_block: How many numbers of molecular blocks converted successfully.
+        num_failed_mol_block: How many numbers of molecular blocks are so corrupted that they can not be converted.
+        max_num_atoms: Maximum number of atoms in those molecules converted successfully.
     """
 
     suppl = Chem.SDMolSupplier(path_to_bad_sdf)
@@ -256,16 +272,20 @@ def convert_to_sdf(path_to_bad_sdf, failed_block_file_name=None, output_dir=None
     save_valid_mol_block_to_path = os.path.join(output_dir, ('converted_%s' % sdf_name))
     save_failed_mol_block_to_path = os.path.join(output_dir, failed_block_file_name)
 
+    max_num_atoms = 0
     if valid_mol_block_list:
         _write_mol_block_to_file(save_valid_mol_block_to_path, valid_mol_block_list)
+        max_num_atoms = _max_atoms_in_mol_block(valid_mol_block_list)
     if failed_block_file_name and failed_mol_block_list:
         _write_mol_block_to_file(save_failed_mol_block_to_path, failed_mol_block_list)
     num_valid_mol_block = len(valid_mol_block_list)
     num_failed_mol_block = len(failed_mol_block_list)
     logging.warning(('Processing on %s from Massbank of North America (MoNA) finished. '
                      'Except for %d failed molecule blocks, totally, '
-                     '%d molecules have been converted to a read-friendly SDF saved in the path %s'),
-                    sdf_name, num_failed_mol_block, num_valid_mol_block, save_valid_mol_block_to_path)
+                     '%d molecules have been converted to a read-friendly SDF saved in the path %s. '
+                     'The maximum number of atoms among these molecules is %d.'),
+                    sdf_name, num_failed_mol_block, num_valid_mol_block, save_valid_mol_block_to_path, max_num_atoms)
+    return valid_mol_block_list, failed_mol_block_list, num_valid_mol_block, num_failed_mol_block, max_num_atoms
 
 
 def main(_):
