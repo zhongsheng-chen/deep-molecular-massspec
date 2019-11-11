@@ -74,7 +74,7 @@ def parse_peaks(pk_str):
 
     for peak in all_peaks:
         loc, intensity = peak.split()
-        peak_locs.append(float(loc))
+        peak_locs.append(int(float(loc)))
         peak_intensities.append(float(intensity))
 
     return peak_locs, peak_intensities
@@ -97,7 +97,7 @@ def make_dense_mass_spectra(peak_locs, peak_intensities, max_peak_loc):
       np.array of the mass spectra data as a dense vector.
     """
     dense_spectrum = np.zeros(max_peak_loc)
-    dense_spectrum[peak_locs] = peak_intensities
+    dense_spectrum[peak_locs] = peak_intensities  # TODO(Zhongsheng Chen): design a new approach to make dense spectrum
 
     return dense_spectrum
 
