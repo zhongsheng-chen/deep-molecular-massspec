@@ -69,12 +69,12 @@ import train_test_split_utils
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string(
-    'main_sdf_name', 'testdata/test_14_mend.sdf',
+    'main_sdf_name', 'test_dataset/MONA-VF-NPL_main_truncated.sdf',
     'specify full path of sdf file to parse, to be used for'
     ' training sets, and validation/test sets')
 flags.DEFINE_string(
     'replicates_sdf_name',
-    'testdata/test_2_mend.sdf',
+    'test_dataset/MONA-VF-NPL-LTQ_truncated.sdf',
     'specify full path of a second sdf file to parse, to be'
     ' used for the vaildation/test set. Molecules in this sdf'
     ' will be excluded from the main train/val/test sets.')

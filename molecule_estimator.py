@@ -15,15 +15,10 @@
 
 Example usage:
 python molecule_estimator.py \
+--dataset_config_file=test_dataset/test_dataset_config_file.json \
 --train_steps=1000 \
---model_dir=/tmp/models/output \
---dataset_config_file=testdata/test_dataset_config_file.json \
---alsologtostderr
-
-python molecule_estimator.py \
---dataset_config_file=/tmp/massspec_predictions/query_replicates_val_predicted_replicates_val.json \
---train_steps=1000 \
---model_dir=/tmp/massspec_predictions/models/output --hparams=make_spectra_plots=True \
+--model_dir=/tmp/massspec_predictions/models/output \
+--hparams=make_spectra_plots=True \
 --alsologtostderr
 """
 

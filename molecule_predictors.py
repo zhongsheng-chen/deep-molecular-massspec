@@ -123,8 +123,8 @@ class MassSpectraPrediction(object):
             max_atom_type=ms_constants.MAX_ATOM_ID,
             include_atom_mass=True,
             normalize_predictions=False,
-            make_spectra_plots=True,  # default :False
-            save_spectra_plots_to_file=True,  # default :False
+            make_spectra_plots=False,
+            save_spectra_plots_to_file=False,
             do_library_matching=True,
             loss='generalized_mse',
             # When computing cosine similarity and generalized_mse, scale the
