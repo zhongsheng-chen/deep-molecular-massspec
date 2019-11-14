@@ -33,6 +33,7 @@ from rdkit import Chem
 import feature_map_constants as fmap_constants
 import feature_utils
 import mass_spec_constants as ms_constants
+from mass_spec_constants import MassSpectrum
 
 # TODO: Implement better shuffling across input files so we don't require a large shuffle
 #       buffer.
@@ -247,7 +248,7 @@ def make_mol_dict(mol,
 
     mass_spec_locs, mass_spec_intensities = feature_utils.parse_peaks(
         mol.GetProp(ms_constants.SDF_TAG_MASS_SPEC_PEAKS))
-    mass_spec_dense_vec = feature_utils.make_dense_mass_spectra(
+    mass_spec_dense = feature_utils.make_dense_mass_spectra(
         mass_spec_locs, mass_spec_intensities, max_mass_spec_peak_loc)
 
     atom_wts = feature_utils.get_padded_atom_weights(mol_canon, max_atoms)
@@ -270,7 +271,7 @@ def make_mol_dict(mol,
         fmap_constants.ATOM_IDS:
             atom_ids,
         fmap_constants.DENSE_MASS_SPEC:
-            mass_spec_dense_vec,
+            mass_spec_dense,
         fmap_constants.ADJACENCY_MATRIX:
             adjacency_matrix,
     }
@@ -290,6 +291,7 @@ def dict_to_tfexample(mol_dict):
     Returns:
       example : tf.example containing mol_dict info.
     """
+
     example = tf.train.Example()
     feature_map = example.features.feature
     feature_map[fmap_constants.ATOM_WEIGHTS].float_list.value.extend(
@@ -300,8 +302,6 @@ def dict_to_tfexample(mol_dict):
         mol_dict[fmap_constants.ADJACENCY_MATRIX])
     feature_map[fmap_constants.MOLECULE_WEIGHT].float_list.value.append(
         mol_dict[fmap_constants.MOLECULE_WEIGHT])
-    feature_map[fmap_constants.DENSE_MASS_SPEC].float_list.value.extend(
-        mol_dict[fmap_constants.DENSE_MASS_SPEC])
     feature_map[fmap_constants.INCHIKEY].bytes_list.value.append(
         mol_dict[fmap_constants.INCHIKEY])
     feature_map[fmap_constants.MOLECULAR_FORMULA].bytes_list.value.append(
@@ -310,6 +310,8 @@ def dict_to_tfexample(mol_dict):
         mol_dict[fmap_constants.NAME])
     feature_map[fmap_constants.SMILES].bytes_list.value.append(
         mol_dict[fmap_constants.SMILES])
+    feature_map[fmap_constants.DENSE_MASS_SPEC].float_list.value.extend(
+        mol_dict[fmap_constants.DENSE_MASS_SPEC])
 
     if fmap_constants.INDEX_TO_GROUND_TRUTH_ARRAY in mol_dict:
         feature_map[
@@ -352,7 +354,7 @@ def write_dicts_to_example(mol_list,
 
     # Wrapper function to add index value to dictionary
     if true_library_array_path_name:
-        spectra_matrix = np.zeros((len(mol_list), max_mass_spec_peak_loc))
+        spectra_matrix = np.zeros((len(mol_list), max_mass_spec_peak_loc * 2))
 
         def make_mol_dict_with_saved_array(idx, mol):
             mol_dict = make_mol_dict(mol, max_atoms, max_mass_spec_peak_loc)
@@ -458,7 +460,7 @@ def _parse_example(example_protos, hparams, features_to_load):
         fmap_constants.ADJACENCY_MATRIX:
             tf.FixedLenFeature([hparams.max_atoms * hparams.max_atoms], tf.int64),
         fmap_constants.DENSE_MASS_SPEC:
-            tf.FixedLenFeature([hparams.max_mass_spec_peak_loc], tf.float32),
+            tf.FixedLenFeature([hparams.max_mass_spec_peak_loc * 2], tf.float32),
         fmap_constants.INCHIKEY:
             tf.FixedLenFeature([1], tf.string, default_value=''),
         fmap_constants.MOLECULAR_FORMULA:
@@ -469,8 +471,8 @@ def _parse_example(example_protos, hparams, features_to_load):
             tf.FixedLenFeature([1], tf.string, default_value=''),
         fmap_constants.INDEX_TO_GROUND_TRUTH_ARRAY:
             tf.FixedLenFeature([1], tf.int64, default_value=0),
-        fmap_constants.SMILES_TOKEN_LIST_LENGTH:
-            tf.FixedLenFeature([1], tf.int64, default_value=0)
+        # fmap_constants.SMILES_TOKEN_LIST_LENGTH:
+        #     tf.FixedLenFeature([1], tf.int64, default_value=0)
     }
 
     for fp_len in ms_constants.NUM_CIRCULAR_FP_BITS_LIST:
@@ -491,8 +493,12 @@ def _parse_example(example_protos, hparams, features_to_load):
 
     if (features_to_load is None or
             fmap_constants.DENSE_MASS_SPEC in features_to_load):
-        parsed_features[fmap_constants.DENSE_MASS_SPEC] = preprocess_spectrum(
-            parsed_features[fmap_constants.DENSE_MASS_SPEC], hparams)
+        dense_mass_spec = tf.reshape(
+            parsed_features[fmap_constants.DENSE_MASS_SPEC],
+            shape=(hparams.max_mass_spec_peak_loc, 2))
+        parsed_features[fmap_constants.DENSE_MASS_SPEC] = dense_mass_spec
+        # parsed_features[fmap_constants.DENSE_MASS_SPEC] = preprocess_spectrum(
+        #     parsed_features[fmap_constants.DENSE_MASS_SPEC], hparams)
 
     if (features_to_load is None or
             fmap_constants.SMILES in features_to_load):

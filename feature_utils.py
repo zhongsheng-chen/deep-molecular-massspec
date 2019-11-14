@@ -74,7 +74,7 @@ def parse_peaks(pk_str):
 
     for peak in all_peaks:
         loc, intensity = peak.split()
-        peak_locs.append(int(float(loc)))
+        peak_locs.append(float(loc))
         peak_intensities.append(float(intensity))
 
     return peak_locs, peak_intensities
@@ -96,10 +96,15 @@ def make_dense_mass_spectra(peak_locs, peak_intensities, max_peak_loc):
     Returns:
       np.array of the mass spectra data as a dense vector.
     """
-    dense_spectrum = np.zeros(max_peak_loc)
-    dense_spectrum[peak_locs] = peak_intensities  # TODO(Zhongsheng Chen): design a new approach to make dense spectrum
 
-    return dense_spectrum
+    mass_spectrum = np.stack((peak_locs, peak_intensities), axis=-1)
+    if mass_spectrum.shape[1] != 2:
+        raise ValueError(
+            "Each mass spectrum  must be 2-D numpy array for peak's locations and intensities.")
+    dense_mass_spectrum = np.zeros((max_peak_loc, 2))
+    dense_mass_spectrum[:mass_spectrum.shape[0], :mass_spectrum.shape[1]] = mass_spectrum
+
+    return np.reshape(dense_mass_spectrum, (max_peak_loc * 2)).astype('float32')
 
 
 def get_padded_atom_weights(mol, max_atoms):
@@ -124,7 +129,7 @@ def get_padded_atom_weights(mol, max_atoms):
                 len(mol.GetAtoms()), max_atoms))
 
     atom_list = np.array([at.GetMass() for at in mol.GetAtoms()])
-    atom_list = np.pad(atom_list, ((0, max_atoms - len(atom_list))), 'constant')
+    atom_list = np.pad(atom_list, (0, max_atoms - len(atom_list)), 'constant')
     return atom_list
 
 
@@ -148,7 +153,7 @@ def get_padded_atom_ids(mol, max_atoms):
                 len(mol.GetAtoms()), max_atoms))
     atom_list = np.array([at.GetAtomicNum() for at in mol.GetAtoms()])
     atom_list = atom_list.astype('int32')
-    atom_list = np.pad(atom_list, ((0, max_atoms - len(atom_list))), 'constant')
+    atom_list = np.pad(atom_list, (0, max_atoms - len(atom_list)), 'constant')
 
     return atom_list
 
