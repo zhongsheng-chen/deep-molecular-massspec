@@ -388,27 +388,25 @@ class ParseSdfUtilsTest(tf.test.TestCase, absltest.TestCase):
            Writes tf.example as tf.record to disk, then reads from disk.
         """
         mol_list = parse_sdf_utils.get_sdf_to_mol(self.test_file_short)
+        records_path_name = os.path.join(self.temp_dir, 'test_record.gz')
 
-        fd, fpath = tempfile.mkstemp(dir=self.temp_dir)
-        os.close(fd)
-
-        parse_sdf_utils.write_dicts_to_example(mol_list, fpath,
+        parse_sdf_utils.write_dicts_to_example(mol_list, records_path_name,
                                                self.hparams.max_atoms,
                                                self.hparams.max_mass_spec_peak_loc)
-        parse_sdf_utils.write_info_file(mol_list, fpath)
-        self._validate_info_file(mol_list, fpath)
+        parse_sdf_utils.write_info_file(mol_list, records_path_name)
+        self._validate_info_file(mol_list, records_path_name)
 
         dataset = parse_sdf_utils.get_dataset_from_record(
-            [fpath], self.hparams, mode=tf.estimator.ModeKeys.EVAL)
+            [records_path_name], self.hparams, mode=tf.estimator.ModeKeys.EVAL)
 
         feature_names = [
             fmap_constants.ATOM_WEIGHTS,
             fmap_constants.MOLECULE_WEIGHT,
-            fmap_constants.DENSE_MASS_SPEC,
+            fmap_constants.DENSE_MASS_SPEC, fmap_constants.MASS_SPEC,
             fmap_constants.INCHIKEY, fmap_constants.NAME,
             fmap_constants.MOLECULAR_FORMULA,
             fmap_constants.ADJACENCY_MATRIX,
-            fmap_constants.ATOM_IDS, fmap_constants.SMILES
+            fmap_constants.ATOM_IDS, fmap_constants.SMILES,
         ]
         label_names = [fmap_constants.INCHIKEY]
 
@@ -444,10 +442,6 @@ class ParseSdfUtilsTest(tf.test.TestCase, absltest.TestCase):
                 feature_values[fmap_constants.MOLECULAR_FORMULA][i],
                 self.expected_mol_dicts[i][fmap_constants.MOLECULAR_FORMULA])
             self.assertSequenceAlmostEqual(
-                feature_values[fmap_constants.DENSE_MASS_SPEC][i].flatten(),
-                self.expected_mol_dicts[i][fmap_constants.DENSE_MASS_SPEC].flatten(),
-                delta=0.0001)
-            self.assertSequenceAlmostEqual(
                 feature_values[fmap_constants.ATOM_WEIGHTS][i],
                 self.expected_mol_dicts[i][fmap_constants.ATOM_WEIGHTS],
                 delta=0.0001)
@@ -460,6 +454,12 @@ class ParseSdfUtilsTest(tf.test.TestCase, absltest.TestCase):
             self.assertAllEqual(
                 feature_values[fmap_constants.SMILES_TOKEN_LIST_LENGTH][i],
                 self.expected_mol_dicts[i][fmap_constants.SMILES_TOKEN_LIST_LENGTH])
+
+            # validate mass spectrum from mol_dict matching with that reading from TFRecord file.
+            self.assertSequenceAlmostEqual(
+                feature_values[fmap_constants.DENSE_MASS_SPEC][i].flatten(),
+                self.expected_mol_dicts[i][fmap_constants.DENSE_MASS_SPEC],
+                delta=0.0001)
 
     def test_save_true_spectra_array(self):
         """Checks contents of true spectra array written by write_dicts_to_example.
@@ -484,12 +484,17 @@ class ParseSdfUtilsTest(tf.test.TestCase, absltest.TestCase):
     def test_record_contents(self):
         """Test the contents of the stored record file to ensure features match."""
         mol_list = parse_sdf_utils.get_sdf_to_mol(self.test_file_long)
+        hparams_main = tf.contrib.training.HParams(
+            max_atoms=ms_constants.MAX_ATOMS,
+            max_mass_spec_peak_loc=ms_constants.MAX_PEAK_LOC,
+            eval_batch_size=len(mol_list),
+            intensity_power=3.0)
         records_path_name = os.path.join(self.temp_dir, 'test_record.gz')
         parse_sdf_utils.write_dicts_to_example(
             mol_list,
             records_path_name,
-            self.hparams.max_atoms,
-            self.hparams.max_mass_spec_peak_loc)
+            max_atoms=hparams_main.max_atoms,
+            max_mass_spec_peak_loc=hparams_main.max_mass_spec_peak_loc)
         parse_sdf_utils.write_info_file(mol_list, records_path_name)
         self._validate_info_file(mol_list, records_path_name)
         mol_dicts = [parse_sdf_utils.make_mol_dict(mol) for mol in mol_list]
@@ -509,11 +514,6 @@ class ParseSdfUtilsTest(tf.test.TestCase, absltest.TestCase):
             for token_arr, token_length in zip(parsed_smiles_tokens, token_lengths)
         ]
 
-        hparams_main = tf.contrib.training.HParams(
-            max_atoms=ms_constants.MAX_ATOMS,
-            max_mass_spec_peak_loc=ms_constants.MAX_PEAK_LOC,
-            eval_batch_size=len(mol_list),
-            intensity_power=1.0)
 
         dataset = parse_sdf_utils.get_dataset_from_record(
             [records_path_name],
@@ -522,7 +522,7 @@ class ParseSdfUtilsTest(tf.test.TestCase, absltest.TestCase):
 
         feature_names = [
             fmap_constants.ATOM_WEIGHTS,
-            fmap_constants.MOLECULE_WEIGHT,
+            fmap_constants.MOLECULE_WEIGHT, fmap_constants.MASS_SPEC,
             fmap_constants.DENSE_MASS_SPEC,
             fmap_constants.INCHIKEY, fmap_constants.NAME,
             fmap_constants.MOLECULAR_FORMULA,
@@ -566,7 +566,7 @@ class ParseSdfUtilsTest(tf.test.TestCase, absltest.TestCase):
             self.assertEqual(feature_values[fmap_constants.MOLECULAR_FORMULA][i],
                              mol_dicts[i][fmap_constants.MOLECULAR_FORMULA])
             self.assertSequenceAlmostEqual(
-                feature_values[fmap_constants.DENSE_MASS_SPEC][i],
+                feature_values[fmap_constants.DENSE_MASS_SPEC][i].flatten(),
                 mol_dicts[i][fmap_constants.DENSE_MASS_SPEC],
                 delta=0.0001)
             self.assertSequenceAlmostEqual(

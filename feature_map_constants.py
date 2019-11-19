@@ -29,6 +29,7 @@ FP_TYPE_LIST = [
     CIRCULAR_FP_BASENAME, COUNTING_CIRCULAR_FP_BASENAME
 ]
 
+MASS_SPEC = 'mass_spec'
 DENSE_MASS_SPEC = 'dense_mass_spec'
 INCHIKEY = 'inchikey'
 NAME = 'name'

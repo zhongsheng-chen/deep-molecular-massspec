@@ -34,6 +34,7 @@ import feature_map_constants as fmap_constants
 import feature_utils
 import mass_spec_constants as ms_constants
 from mass_spec_constants import MassSpectrum
+from collections import namedtuple
 
 # TODO: Implement better shuffling across input files so we don't require a large shuffle
 #       buffer.
@@ -416,14 +417,15 @@ def parse_info_file(fname):
 
 def preprocess_spectrum(spectrum, hparams):
     if hparams.intensity_power != 1.0:
-        return tf.pow(spectrum, hparams.intensity_power)
+        tf.pow(spectrum.peak_intensities, hparams.intensity_power)
+        return spectrum
     else:
         return spectrum
 
 
 def postprocess_spectrum(spectrum, hparams):
     if hparams.intensity_power != 1.0:
-        return tf.pow(spectrum, 1. / hparams.intensity_power)
+        return tf.pow(spectrum.peak_intensities, 1. / hparams.intensity_power)
     else:
         return spectrum
 
@@ -461,6 +463,8 @@ def _parse_example(example_protos, hparams, features_to_load):
             tf.FixedLenFeature([hparams.max_atoms * hparams.max_atoms], tf.int64),
         fmap_constants.DENSE_MASS_SPEC:
             tf.FixedLenFeature([hparams.max_mass_spec_peak_loc * 2], tf.float32),
+        fmap_constants.MASS_SPEC:
+            tf.FixedLenFeature([hparams.max_mass_spec_peak_loc, 2], tf.float32),
         fmap_constants.INCHIKEY:
             tf.FixedLenFeature([1], tf.string, default_value=''),
         fmap_constants.MOLECULAR_FORMULA:
@@ -471,8 +475,8 @@ def _parse_example(example_protos, hparams, features_to_load):
             tf.FixedLenFeature([1], tf.string, default_value=''),
         fmap_constants.INDEX_TO_GROUND_TRUTH_ARRAY:
             tf.FixedLenFeature([1], tf.int64, default_value=0),
-        # fmap_constants.SMILES_TOKEN_LIST_LENGTH:
-        #     tf.FixedLenFeature([1], tf.int64, default_value=0)
+        fmap_constants.SMILES_TOKEN_LIST_LENGTH:
+            tf.FixedLenFeature([1], tf.int64, default_value=0)
     }
 
     for fp_len in ms_constants.NUM_CIRCULAR_FP_BITS_LIST:
@@ -497,8 +501,12 @@ def _parse_example(example_protos, hparams, features_to_load):
             parsed_features[fmap_constants.DENSE_MASS_SPEC],
             shape=(hparams.max_mass_spec_peak_loc, 2))
         parsed_features[fmap_constants.DENSE_MASS_SPEC] = dense_mass_spec
-        # parsed_features[fmap_constants.DENSE_MASS_SPEC] = preprocess_spectrum(
-        #     parsed_features[fmap_constants.DENSE_MASS_SPEC], hparams)
+        dense_peak_locs = dense_mass_spec[:, 0]
+        dense_peak_intensities = dense_mass_spec[:, -1]
+        mass_spec = (
+            MassSpectrum(peak_locs=dense_peak_locs, peak_intensities=dense_peak_intensities))
+        parsed_features[fmap_constants.MASS_SPEC] = mass_spec
+        # parsed_features[fmap_constants.MASS_SPEC] = preprocess_spectrum(mass_spec, hparams)
 
     if (features_to_load is None or
             fmap_constants.SMILES in features_to_load):
@@ -601,6 +609,7 @@ def get_dataset_from_record(fnames,
     if features_to_load is None or fmap_constants.SMILES in features_to_load:
         padded_shapes = make_padded_shapes_for_dataset(dataset)
         padded_shapes[fmap_constants.SMILES] = ms_constants.MAX_TOKEN_LIST_LENGTH
+        dataset = dataset.padded_batch(batch_size)
         dataset = dataset.padded_batch(batch_size, padded_shapes=padded_shapes)
         assert dataset.output_shapes[fmap_constants.SMILES].ndims == 2
 
